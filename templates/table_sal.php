@@ -24,7 +24,7 @@
             <thead>
                 <tr style="line-height: 35px;">
 
-                    <th>Good's Name </th>
+                    <th>Commodity's Name </th>
                     <th>Price</th>
                     <th>Date</th>
                     <th>Paid</th>
@@ -45,7 +45,7 @@
                                     <i class="fas fa-trash-alt"></i>
                                 </button>
 
-                                <button class="fab-button edit small mr-rm-10" data-toggle="modal" data-target="#updateModal" id="name_cons" value=" " onclick=edit(this.parentElement.parentElement.parentElement.children[0].innerHTML,<?php echo $name['_id']; ?>);>
+                                <button class="fab-button edit small mr-rm-10" data-toggle="modal" data-target="#updateModal" id="name_cons" value=" " onclick=edit(this.parentElement.parentElement.parentElement.children[0].innerHTML,<?php echo $name['_id']; ?>,<?php echo $name['price']; ?>);>
                                     <i class="fas fa-edit" style="font-weight: 500;"></i>
                                 </button>
                                 
@@ -58,6 +58,6 @@
         </table>
     </div>
 </div>
-<?php include 'modal/add_consumer.php'; ?>
-<?php include 'modal/remove_consumer.php'; ?>
-<?php include 'modal/update.php'; ?>
+<?php include 'modal/add_goods.php'; ?>
+<?php include 'modal/remove_goods.php'; ?>
+<?php include 'modal/update_goods.php'; ?>
