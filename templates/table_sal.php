@@ -1,5 +1,7 @@
-<div class="title-container">
-    <h2>All Consumers</h2>
+<div class="title-container flex-container space-around align-center" >
+    <h2><?php echo $consumer_name.' sales' ?></h2>
+    <h2><?php echo 'Total Price : '. $total ?></h2>
+
 </div>
 <div style="min-height:71px" class="browse-panel flex-container align-center space-between mr-bm-50">
     <div class="search-container flex-box-40">
@@ -22,16 +24,21 @@
             <thead>
                 <tr style="line-height: 35px;">
 
-                    <th>Consumer's Name </th>
-                    <th>Remainder Money</th>
+                    <th>Good's Name </th>
+                    <th>Price</th>
+                    <th>Date</th>
+                    <th>Paid</th>
                     <th>Actions</th>
             </thead>
             <tbody>
-                <?php foreach ($user_consumers as $name) : ?>
+                <?php foreach ($sale_consumers as $name) : ?>
                     <tr>
 
                         <td> <?php echo $name['name']; ?> </td>
-                        <td> <?php echo $name['total'] ?> </td>
+                        <td> <?php echo $name['price'] ?> </td>
+                        <td> <?php echo $name['date'] ?> </td>
+                        <td> <?php echo $name['paid'] ?> </td>
+
                         <td>
                             <div class="flex-container align-center center ">
                                 <button class="fab-button danger small mr-rm-10" data-toggle="modal" data-target="#delModal" onclick="remove(<?php echo $name['_id']; ?>); ">
@@ -41,11 +48,7 @@
                                 <button class="fab-button edit small mr-rm-10" data-toggle="modal" data-target="#updateModal" id="name_cons" value=" " onclick=edit(this.parentElement.parentElement.parentElement.children[0].innerHTML,<?php echo $name['_id']; ?>);>
                                     <i class="fas fa-edit" style="font-weight: 500;"></i>
                                 </button>
-                                <a href="sales.php?id=<?php echo $name['_id']; ?>">
-                                    <button class="fab-button view small mr-rm-10">
-                                        <i class="far fa-eye"></i>
-                                    </button>
-                                </a>
+                                
                             </div>
                         </td>
                     </tr>

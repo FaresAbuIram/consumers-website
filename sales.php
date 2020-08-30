@@ -33,35 +33,45 @@ if (isset($_POST['update'])) {
     $consumer_id = $_POST['consumer_id'];
     $con4 = "UPDATE consumers SET consumer_name = '$update_name' WHERE _id = $consumer_id AND user_id= $user_id";
     $result4 = mysqli_query($connect, $con4);
-   
 }
-
-$con = 'SELECT * FROM consumers ORDER BY consumer_name';
-$result = mysqli_query($connect, $con);
-$consumers = mysqli_fetch_all($result);
-$user_consumers = [];
-$arr = array('_id' => '', 'name' => '', 'total' => '');
-
-
-foreach ($consumers as $consumer) {
-
-    if ($consumer[1] == $_SESSION['user_id']) {
-        $sum = 0;
-        $arr['name'] = $consumer[2];
-        $arr['_id'] = $consumer[0];
-        $sal = 'SELECT * FROM goods ';
-        $result = mysqli_query($connect, $sal);
-        $sales = mysqli_fetch_all($result);
-        foreach ($sales as $sale) {
-            if ($sale[1] == $_SESSION['user_id'] && $sale[2] == $consumer[0] && $sale[5] == 0) {
-                $sum += $sale[4];
-            }
+$sale_consumers = [];
+$total = '';
+$consumer_name = '';
+if (isset($_GET)) {
+    $con = 'SELECT * FROM consumers';
+    $result = mysqli_query($connect, $con);
+    $consumers = mysqli_fetch_all($result);
+    foreach ($consumers as $consumer) {
+        if ($consumer[0] == $_GET['id']) {
+            $consumer_name = $consumer[2];
+            break;
         }
-        $arr['total'] = $sum;
-        array_push($user_consumers, $arr);
     }
-}
 
+    $con = 'SELECT * FROM goods ORDER BY name';
+    $result = mysqli_query($connect, $con);
+    $sales = mysqli_fetch_all($result);
+
+    $arr = array('_id' => '', 'name' => '', 'price' => '', 'date' => '','paid'=>'');
+    $total=0;
+    foreach ($sales as $sale) {
+        if ($sale[1] == $_SESSION['user_id'] && $sale[2] == $_GET['id']) {
+            $arr['name'] = $sale[3];
+            $arr['_id'] = $sale[0];
+            $arr['price'] = $sale[4];
+            $arr['date'] = $sale[6];
+            if ($sale[5] == 0){
+                $arr['paid'] = 'Not Paid';
+                $total += $sale[4];
+            }
+            else{
+                $arr['paid'] = 'Paid';
+            }
+            array_push($sale_consumers, $arr);
+        }
+    }
+    
+}
 
 
 ?>
@@ -102,7 +112,7 @@ foreach ($consumers as $consumer) {
             <div><?php include 'templates/navside.php'; ?></div>
             <div class="main-container bo-row ">
                 <div class="browse-root ">
-                    <?php include 'templates/table.php'; ?>
+                    <?php include 'templates/table_sal.php'; ?>
                 </div>
             </div>
         </div>
