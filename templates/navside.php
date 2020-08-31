@@ -26,7 +26,7 @@
                         </a>
                     </li>
                     <li>
-                        <a class="nav-link" href="./table.html">
+                        <a class="nav-link" href="logout.php">
                             <i class="fa fa-sign-out" aria-hidden="true"></i>
                             <p>Log out</p>
                         </a>
