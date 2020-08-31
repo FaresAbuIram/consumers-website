@@ -6,7 +6,7 @@
 <div style="min-height:71px" class="browse-panel flex-container align-center space-between mr-bm-50">
     <div class="search-container flex-box-40">
         <form>
-            <input type="text" name="searchString" placeholder="Search..." id="">
+            <input type="text" name="searchString" placeholder="Search..." id="search" onkeyup=searchElement();>
             <i class="fas fa-search search-icon"></i>
 
         </form>

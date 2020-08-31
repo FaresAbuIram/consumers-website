@@ -123,6 +123,8 @@ foreach ($consumers as $consumer) {
 <script src="../assets/js/light-bootstrap-dashboard.js?v=2.0.0 " type="text/javascript"></script>
 <!-- Light Bootstrap Dashboard DEMO methods, don't include it in your project! -->
 <script src="../assets/js/demo.js"></script>
+<script src="../assets/js/search.js"></script>
+
 <!--  Chartist Plugin  -->
 <script src="../assets/js/chartist.min.js"></script>
 <!--  Notifications Plugin    -->
@@ -147,6 +149,8 @@ foreach ($consumers as $consumer) {
         document.getElementById('consumer_update_id').value = id;
         console.log(id);
     }
+    
+
 </script>
 
 
