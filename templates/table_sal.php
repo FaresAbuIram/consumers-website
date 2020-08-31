@@ -1,6 +1,6 @@
 <div class="title-container flex-container space-around align-center" >
     <h2><?php echo $consumer_name.' sales' ?></h2>
-    <h2><?php echo 'Total Price : '. $total ?></h2>
+    <h2><?php echo 'Total Unpaid Price : '. $total ?></h2>
 
 </div>
 <div style="min-height:71px" class="browse-panel flex-container align-center space-between mr-bm-50">

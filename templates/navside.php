@@ -20,7 +20,7 @@
                         </a>
                     </li>
                     <li>
-                        <a class="nav-link" href="./table.html">
+                        <a class="nav-link" href="all_sales.php">
                             <i class="nc-icon nc-notes" ></i>
                             <p>The Sales</p>
                         </a>
