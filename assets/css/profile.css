@@ -1,0 +1,64 @@
+.profile {
+  width: 100%;
+  height: 100%;
+  color: #000; }
+
+.background-image {
+  width: 100%;
+  height: 250px; }
+
+.up-image {
+  left: 0;
+  width: 100%;
+  height: 100%; }
+
+.up-side {
+  position: absolute;
+  background-color: white;
+  border-radius: 50%;
+  height: 170px;
+  width: 170px;
+  bottom: calc(100% - 400px); }
+
+.down-side {
+  position: fixed;
+  top: 400px; }
+
+.name {
+  padding-top: 25px;
+  font: 1em sans-serif;
+  color: #000;
+  font-size: 25px; }
+
+.button {
+  min-width: 200px;
+  min-height: 40px;
+  background-color: #5081f5;
+  cursor: pointer;
+  color: #fff;
+  font-size: 25px;
+  border-radius: 12px; }
+
+.up-side:hover {
+  display: flex; }
+
+.button:hover {
+  background-color: #205ef2;
+  text-decoration: none;
+  color: #fff; }
+
+.cahnge-im-pr {
+  background-color: #46444486;
+  position: absolute;
+  bottom: 30px;
+  right: 30px; }
+
+.cahnge-im-pr:hover {
+  width: 35px;
+  height: 35px;
+  cursor: pointer; }
+ .padding_prof{
+   padding-right: 25px;
+ }
+
+/*# sourceMappingURL=profile.css.map */
