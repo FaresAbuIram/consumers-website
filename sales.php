@@ -44,7 +44,7 @@ if (isset($_POST['update'])) {
     $update_name = $_POST['update_name'];
 
     $con4 = "UPDATE goods SET name = '$update_name', price = $price, if_paid = $paid WHERE _id = $Commodity_id";
-  
+
     $result4 = mysqli_query($connect, $con4);
 
     header("Location: sales.php?id=$cons_id");
@@ -133,7 +133,7 @@ if (isset($_GET)) {
         </div>
     </div>
 </body>
-<script src="../assets/js/core/jquery.3.2.1.min.js" type="text/javascript"></script>
+<!--<script src="../assets/js/core/jquery.3.2.1.min.js" type="text/javascript"></script>-->
 <script src="../assets/js/core/popper.min.js" type="text/javascript"></script>
 <script src="../assets/js/core/bootstrap.min.js" type="text/javascript"></script>
 <!--  Plugin for Switches, full documentation here: http://www.jque.re/plugins/version3/bootstrap.switch/ -->
@@ -176,6 +176,60 @@ if (isset($_GET)) {
 
     }
 </script>
+<script>
+    $(document).ready(function() {
+        $('#addModal').bootstrapValidator({
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            fields: {
+                name: {
+                    validators: {
+                        notEmpty: {
+                            message: 'This Field is Required <br />'
+                        }
 
+                    }
+                },
+                price: {
+                    validators: {
+                        notEmpty: {
+                            message: 'This Field is Required <br />'
+                        }
+
+                    }
+                },
+            },
+        });
+        $('#updateModal').bootstrapValidator({
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            fields: {
+                update_name: {
+                    validators: {
+                        notEmpty: {
+                            message: 'This Field is Required <br />'
+                        }
+
+                    }
+                },
+                price: {
+                    validators: {
+                        notEmpty: {
+                            message: 'This Field is Required <br />'
+                        }
+
+                    }
+                },
+            },
+        });
+
+    });
+</script>
 
 </html>

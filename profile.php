@@ -122,7 +122,6 @@ foreach ($users as $user) {
 
 
     <script>
-        document.cookie = escape("pass") + "=" + escape('');
 
         $(document).ready(function() {
             $('#update_email').bootstrapValidator({
@@ -214,8 +213,6 @@ foreach ($users as $user) {
 
                     },
                 });
-
-
 
         });
     </script>
