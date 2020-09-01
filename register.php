@@ -41,8 +41,8 @@ if (isset($_POST['register'])) {
     if (!array_filter($errors)) {
         $email = $_POST['email'];
         $name = $_POST['user_name'];
-        $password = $_POST['password'];
-        $users = "INSERT INTO users(`email`, `password`, `name`) VALUES ( '$email','$name', '$password')";
+        $password = password_hash($_POST['password'], PASSWORD_BCRYPT);
+        $users = "INSERT INTO users(`email`, `password`, `name`) VALUES ( '$email','$password', '$name')";
         $result = mysqli_query($connect, $users);
 
         header('Location: login.php');

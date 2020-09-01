@@ -16,6 +16,8 @@
 include('auth/auth.php');
 include('database/db.php');
 $user_id = $_SESSION['user_id'];
+
+
 if (isset($_POST['submit'])) {
     $consumer_name = $_POST['name'];
     $con1 = "INSERT INTO consumers(`user_id`, `consumer_name`) VALUES ('$user_id','$consumer_name')";
@@ -33,7 +35,6 @@ if (isset($_POST['update'])) {
     $consumer_id = $_POST['consumer_id'];
     $con4 = "UPDATE consumers SET consumer_name = '$update_name' WHERE _id = $consumer_id AND user_id= $user_id";
     $result4 = mysqli_query($connect, $con4);
-   
 }
 
 $con = 'SELECT * FROM consumers ORDER BY consumer_name';
@@ -149,8 +150,6 @@ foreach ($consumers as $consumer) {
         document.getElementById('consumer_update_id').value = id;
         console.log(id);
     }
-    
-
 </script>
 
 

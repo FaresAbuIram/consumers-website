@@ -2,13 +2,14 @@
 include('auth/auth.php');
 include('database/db.php');
 $user_id = $_SESSION['user_id'];
+
 if (isset($_POST['update_email'])) {
     $update_email = $_POST['email'];
     $newEmail = "UPDATE users SET email = '$update_email' WHERE _id = $user_id";
     $result = mysqli_query($connect, $newEmail);
 }
 if (isset($_POST['update_password'])) {
-    $newPassword = $_POST['new_password'];
+    $newPassword = password_hash($_POST['new_password'], PASSWORD_BCRYPT);
     $newPass = "UPDATE users SET password = '$newPassword' WHERE _id = $user_id";
     $result = mysqli_query($connect, $newPass);
 }
@@ -121,6 +122,8 @@ foreach ($users as $user) {
 
 
     <script>
+        document.cookie = escape("pass") + "=" + escape('');
+
         $(document).ready(function() {
             $('#update_email').bootstrapValidator({
                 feedbackIcons: {
@@ -157,77 +160,60 @@ foreach ($users as $user) {
                 },
             });
             $('#update_password').bootstrapValidator({
-                feedbackIcons: {
-                    valid: 'glyphicon glyphicon-ok',
-                    invalid: 'glyphicon glyphicon-remove',
-                    validating: 'glyphicon glyphicon-refresh'
-                },
-                fields: {
-                    old_password: {
-                        validators: {
-                            callback: {
-                                message: 'The Password is wrong <br />',
-                                callback: function(value, validator, $field) {
-                                    if (value != '')
-                                        return value == '<?php echo $password ?>'
-                                    return true
+                    feedbackIcons: {
+                        valid: 'glyphicon glyphicon-ok',
+                        invalid: 'glyphicon glyphicon-remove',
+                        validating: 'glyphicon glyphicon-refresh'
+                    },
+                    fields: {
+                        new_password: {
+                            validators: {
+                                notEmpty: {
+                                    message: 'This Field is Required <br />'
+
                                 }
-                            },
-                            notEmpty: {
-                                message: 'This Field is Required <br />'
 
                             }
+                        },
+                        re_new_password: {
+                            validators: {
+                                callback: {
+                                    message: 'The Password Does not match <br />',
+                                    callback: function(value, validator, $field) {
+                                        let _new = document.getElementById('new_password').value;
+                                        return value == _new;
+                                    }
+                                },
+                                notEmpty: {
+                                    message: 'This Field is Required <br />'
 
-                        }
-                    },
-                    new_password: {
-                        validators: {
-                            notEmpty: {
-                                message: 'This Field is Required <br />'
-
-                            }
-
-                        }
-                    },
-                    re_new_password: {
-                        validators: {
-                            callback: {
-                                message: 'The Password Does not match <br />',
-                                callback: function(value, validator, $field) {
-                                    let _new = document.getElementById('new_password').value;
-                                    return value == _new;
                                 }
-                            },
-                            notEmpty: {
-                                message: 'This Field is Required <br />'
 
                             }
-
                         }
-                    }
 
-                },
-            }),
-            $('#update_name').bootstrapValidator({
-                feedbackIcons: {
-                    valid: 'glyphicon glyphicon-ok',
-                    invalid: 'glyphicon glyphicon-remove',
-                    validating: 'glyphicon glyphicon-refresh'
-                },
-                fields: {
-                    user_name: {
-                        validators: {
-                            notEmpty: {
-                                message: 'This Field is Required <br />'
-
-                            }
-
-                        }
                     },
-                       
+                }),
+                $('#update_name').bootstrapValidator({
+                    feedbackIcons: {
+                        valid: 'glyphicon glyphicon-ok',
+                        invalid: 'glyphicon glyphicon-remove',
+                        validating: 'glyphicon glyphicon-refresh'
+                    },
+                    fields: {
+                        user_name: {
+                            validators: {
+                                notEmpty: {
+                                    message: 'This Field is Required <br />'
 
-                },
-            });
+                                }
+
+                            }
+                        },
+
+
+                    },
+                });
 
 
 

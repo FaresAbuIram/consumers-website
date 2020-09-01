@@ -33,7 +33,7 @@ if (isset($_POST['submit'])) {
         }
         if (!$correct) {
             $login_error = 'User does not exist ! <br />';
-        } elseif ($corr_user != $_POST['password']) {
+        } elseif (!password_verify($_POST['password'], $corr_user)) {
             $login_error = 'Password does not correct ! <br />';
         } else {
             session_start();

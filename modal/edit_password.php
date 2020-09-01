@@ -8,10 +8,6 @@
                 </div>
                 <div class="modal-body">
                     <div class="form-group ">
-                        <label>Old Password</label>
-                        <input class="form-control" name="old_password" id="name" type="password">
-                    </div>
-                    <div class="form-group ">
                         <label>New Password</label>
                         <input class="form-control" name="new_password" id="new_password" type="password">
                     </div>
