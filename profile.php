@@ -7,11 +7,15 @@ if (isset($_POST['update_email'])) {
     $newEmail = "UPDATE users SET email = '$update_email' WHERE _id = $user_id";
     $result = mysqli_query($connect, $newEmail);
 }
-if(isset($_POST['update_password'])){
-    $newPassword=$_POST['new_password'];
-    $newPass= "UPDATE users SET password = '$newPassword' WHERE _id = $user_id";
+if (isset($_POST['update_password'])) {
+    $newPassword = $_POST['new_password'];
+    $newPass = "UPDATE users SET password = '$newPassword' WHERE _id = $user_id";
     $result = mysqli_query($connect, $newPass);
-
+}
+if (isset($_POST['update_name'])) {
+    $newName = $_POST['user_name'];
+    $newNam = "UPDATE users SET name = '$newName' WHERE _id = $user_id";
+    $result = mysqli_query($connect, $newNam);
 }
 
 $all_user = 'SELECT * FROM users ';
@@ -19,11 +23,13 @@ $result = mysqli_query($connect, $all_user);
 $users = mysqli_fetch_all($result);
 $email = '';
 $password = '';
+$userName = '';
 $emails = '';
 foreach ($users as $user) {
     if ($user[0] == $user_id) {
         $email = $user[1];
         $password = $user[2];
+        $userName = $user[3];
         break;
     }
 };
@@ -78,12 +84,18 @@ foreach ($users as $user) {
             <div><?php include 'templates/navside.php'; ?></div>
             <div class="profile flex-container column  align-center ">
                 <div class="background-image">
-                    <img class="up-image" src="https://dhtmlfaq.com/data/blue-menu.files/background.jpg">
+                    <img class="up-image" src="https://i.pinimg.com/originals/67/10/cd/6710cdb7d1bad384291c6ac63a0c9b84.jpg">
                 </div>
                 <div class="up-side  flex-container  align-center center ">
                     <img src="http://www.eurogeosurveys.org/wp-content/uploads/2014/02/default_profile_pic.jpg" class="  rounded-circle" alt="Cinque Terre" width="150" height="150">
                 </div>
                 <div class="  down-side flex-container column   ">
+                    <div class="name flex-container row  center ">
+                        <div class="padding_prof"><?php echo $userName ?></div>
+                        <button class="fab-button edit small mr-rm-10 " data-toggle="modal" data-target="#update_name" onclick=" ">
+                            <i class="fas fa-edit "></i>
+                        </button>
+                    </div>
                     <div class="name flex-container row  center ">
                         <div class="padding_prof"><?php echo $email ?></div>
                         <button class="fab-button edit small mr-rm-10 " data-toggle="modal" data-target="#update_email" onclick=" ">
@@ -104,6 +116,9 @@ foreach ($users as $user) {
     </div>
     <?php include('modal/edit_profile.php') ?>
     <?php include('modal/edit_password.php') ?>
+    <?php include('modal/edit_name.php') ?>
+
+
 
     <script>
         $(document).ready(function() {
@@ -153,7 +168,7 @@ foreach ($users as $user) {
                             callback: {
                                 message: 'The Password is wrong <br />',
                                 callback: function(value, validator, $field) {
-                                    if (value!='')
+                                    if (value != '')
                                         return value == '<?php echo $password ?>'
                                     return true
                                 }
@@ -192,7 +207,28 @@ foreach ($users as $user) {
                     }
 
                 },
+            }),
+            $('#update_name').bootstrapValidator({
+                feedbackIcons: {
+                    valid: 'glyphicon glyphicon-ok',
+                    invalid: 'glyphicon glyphicon-remove',
+                    validating: 'glyphicon glyphicon-refresh'
+                },
+                fields: {
+                    user_name: {
+                        validators: {
+                            notEmpty: {
+                                message: 'This Field is Required <br />'
+
+                            }
+
+                        }
+                    },
+                       
+
+                },
             });
+
 
 
         });

@@ -1,45 +1,51 @@
 <?php
 include('database/db.php');
-$errors = array('email' => '', 'password' => '');
+$errors = array('email' => '', 'name' => '', 'password' => '', 'rePassword' => '');
 $login_error = '';
-$email = $password = '';
-if (isset($_POST['submit'])) {
+$email = $name  = '';
+if (isset($_POST['register'])) {
+    $name = $_POST['user_name'];
 
     if (empty($_POST['email'])) {
-        $errors['email'] = 'An email is required ! <br />';
+        $errors['email'] = 'This field is required ! <br />';
     } else {
         $email = $_POST['email'];
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            $errors['email'] = "email must  be a vaild email";
+            $errors['email'] = "email must  be a vaild email ! <br />";
+        } else {
+            $allUser = 'SELECT * FROM users';
+            $result = mysqli_query($connect, $allUser);
+            $users = mysqli_fetch_all($result);
+
+            foreach ($users as $user) {
+                if ($user[1] == $email) {
+                    $errors['email'] = "This email is exist ! <br />";
+                    break;
+                }
+            }
         }
     }
     if (empty($_POST['password'])) {
-        $errors['password'] = 'A password is required ! <br />';
+        $errors['password'] = 'This field is required ! <br />';
     }
+    if (empty($_POST['re_password'])) {
+        $errors['rePassword'] = 'This field is required ! <br />';
+    }
+    if (!empty($_POST['password']) && !empty($_POST['re_password']) && $_POST['password'] != $_POST['re_password']) {
+        $errors['rePassword'] = 'This Password does not match ! <br />';
+    }
+    if (empty($_POST['user_name'])) {
+        $errors['name'] = 'This field is required ! <br />';
+    }
+
     if (!array_filter($errors)) {
-        $users = 'SELECT * FROM users';
+        $email = $_POST['email'];
+        $name = $_POST['user_name'];
+        $password = $_POST['password'];
+        $users = "INSERT INTO users(`email`, `password`, `name`) VALUES ( '$email','$name', '$password')";
         $result = mysqli_query($connect, $users);
-        $user = mysqli_fetch_all($result);
-        $correct = false;
-        $corr_user = '';
-        $user_id = '';
-        foreach ($user as $user1) {
-            if ($user1[1] == $_POST['email']) {
-                $correct = true;
-                $user_id = $user1[0];
-                $corr_user = $user1[2];
-                break;
-            }
-        }
-        if (!$correct) {
-            $login_error = 'User does not exist ! <br />';
-        } elseif ($corr_user != $_POST['password']) {
-            $login_error = 'Password does not correct ! <br />';
-        } else {
-            session_start();
-            $_SESSION['user_id'] = $user_id;
-            header('Location: index.php');
-        }
+
+        header('Location: login.php');
     }
 }
 
@@ -58,7 +64,7 @@ if (isset($_POST['submit'])) {
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Login</title>
+    <title>Register</title>
 
     <!-- CSS -->
     <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:400,100,300,500">
@@ -66,6 +72,7 @@ if (isset($_POST['submit'])) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="assets/css/form-elements.css">
     <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/global.css">
 
     <link rel="shortcut icon" href="assets/ico/favicon.png">
     <link rel="apple-touch-icon-precomposed" sizes="144x144" href="assets/ico/apple-touch-icon-144-precomposed.png">
@@ -89,15 +96,20 @@ if (isset($_POST['submit'])) {
                     <div class="col-sm-6 col-sm-offset-3 form-box">
                         <div class="form-top">
                             <div class="form-top-left">
-                                <h3>Login to our site</h3>
-                                <p>Enter your email and password to log on:</p>
+                                <h3>Create a new account</h3>
+                                <p>Fill your Information below to sign up :</p>
                             </div>
                             <div class="form-top-right">
                                 <i class="fa fa-lock" aria-hidden="true"></i>
                             </div>
                         </div>
                         <div class="form-bottom">
-                            <form role="form" action="/login.php" method="POST" class="login-form">
+                            <form role="form" action="register.php" method="POST" class="login-form">
+                                <div class="form-group ">
+                                    <input type="text" placeholder="User Name" name="user_name" value="<?php echo $name ?>" class="form-email form-control" id="form-email">
+                                    <div class="error"><?php echo $errors['name'] ?></div>
+                                </div>
+
                                 <div class="form-group">
                                     <input type="text" placeholder="Email" name="email" value="<?php echo $email ?>" class="form-email form-control" id="form-email">
                                     <div class="error"><?php echo $errors['email'] ?></div>
@@ -105,10 +117,15 @@ if (isset($_POST['submit'])) {
                                 <div class="form-group">
                                     <input type="password" placeholder="Password" name="password" class="form-password form-control" id="form-password">
                                     <div class="error"><?php echo $errors['password'] ?></div>
+
                                 </div>
-                                <input type="submit" name="submit" class="btn" value="Sign in!">
+                                <div class="form-group">
+                                    <input type="password" placeholder="Re-Type Password" name="re_password" class="form-password form-control" id="form-password">
+                                    <div class="error"><?php echo $errors['rePassword'] ?></div>
+                                </div>
+                                <input type="submit" name="register" class="btn" value="Sign in!">
                                 <div class="error"><?php echo $login_error; ?></div>
-                                <div style="text-align: center; "> <a href="register.php" style="color: blue;  text-decoration: underline;  text-align: center; 	cursor: pointer;"> Click to create a new account</a>
+                                <div style="text-align: center; "> <a href="login.php" style="color: blue;  text-decoration: underline;  text-align: center; 	cursor: pointer;"> Click to log in</a>
                                 </div>
                             </form>
                         </div>
