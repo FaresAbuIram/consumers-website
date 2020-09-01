@@ -3,7 +3,7 @@
             <div class="sidebar-wrapper">
                 <div class="logo">
                     <a class="simple-text">
-                        new website
+                        Consumers
                     </a>
                 </div>
                 <ul class="nav">
