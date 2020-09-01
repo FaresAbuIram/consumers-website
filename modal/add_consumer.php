@@ -15,7 +15,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                    <input type="submit"  name="submit" class="btn btn-primary" value="Save">
+                    <input type="submit"  name="submit" class="btn btn-primary"  value="Save">
                 </div>
             </div>
         </div>

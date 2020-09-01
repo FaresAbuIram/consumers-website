@@ -19,3 +19,11 @@ function searchElement() {
 
     }
 };
+function showMessage(message) {
+    document.getElementById('message').innerHTML = message;
+    document.getElementById('alert').style.display = 'block';
+
+    setTimeout(function() {
+        document.getElementById('alert').style.display = 'none';
+    }, 2000);
+}

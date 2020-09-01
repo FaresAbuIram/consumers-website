@@ -585,6 +585,14 @@ a:not(.collapsed) .arrow-collapse::before {
 .help-block {
   color: red;
 }
+.alert{
+  width: 350px;
+  margin-left: auto;
+  display: none;
+}
+.message{
+  padding-left: 7px;
+}
 
 
 
