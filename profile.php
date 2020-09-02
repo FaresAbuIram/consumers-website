@@ -6,36 +6,41 @@ $user_id = $_SESSION['user_id'];
 if (isset($_POST['update_email'])) {
     $update_email = $_POST['email'];
     $newEmail = "UPDATE users SET email = '$update_email' WHERE _id = $user_id";
-    $result = mysqli_query($connect, $newEmail);
+    $stmt = $pdo->prepare($newEmail);
+    $stmt->execute();
 }
 if (isset($_POST['update_password'])) {
     $newPassword = password_hash($_POST['new_password'], PASSWORD_BCRYPT);
     $newPass = "UPDATE users SET password = '$newPassword' WHERE _id = $user_id";
-    $result = mysqli_query($connect, $newPass);
+    $stmt = $pdo->prepare($newPass);
+    $stmt->execute();
 }
 if (isset($_POST['update_name'])) {
     $newName = $_POST['user_name'];
     $newNam = "UPDATE users SET name = '$newName' WHERE _id = $user_id";
-    $result = mysqli_query($connect, $newNam);
+    $stmt = $pdo->prepare($newNam);
+    $stmt->execute();
 }
 
-$all_user = 'SELECT * FROM users ';
-$result = mysqli_query($connect, $all_user);
-$users = mysqli_fetch_all($result);
+$all_user = "SELECT * FROM users";
+$stmt = $pdo->prepare($all_user);
+$stmt->execute();
+$array = $stmt->fetchAll();
+$users = json_decode(json_encode($array), true);
 $email = '';
 $password = '';
 $userName = '';
 $emails = '';
 foreach ($users as $user) {
-    if ($user[0] == $user_id) {
-        $email = $user[1];
-        $password = $user[2];
-        $userName = $user[3];
+    if ($user['_id'] == $user_id) {
+        $email = $user['email'];
+        $password = $user['password'];
+        $userName = $user['name'];
         break;
     }
 };
 foreach ($users as $user) {
-    $emails = $emails . '@@' . $user[1];
+    $emails = $emails . '@@' . $user['email'];
 };
 
 ?>
@@ -124,7 +129,6 @@ foreach ($users as $user) {
 
 
     <script>
-
         $(document).ready(function() {
             $('#update_email').bootstrapValidator({
                 feedbackIcons: {

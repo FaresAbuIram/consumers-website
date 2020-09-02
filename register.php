@@ -1,5 +1,6 @@
 <?php
 include('database/db.php');
+
 $errors = array('email' => '', 'name' => '', 'password' => '', 'rePassword' => '');
 $login_error = '';
 $email = $name  = '';
@@ -14,11 +15,13 @@ if (isset($_POST['register'])) {
             $errors['email'] = "email must  be a vaild email ! <br />";
         } else {
             $allUser = 'SELECT * FROM users';
-            $result = mysqli_query($connect, $allUser);
-            $users = mysqli_fetch_all($result);
+            $stmt = $pdo->prepare($allUser);
+            $stmt->execute();
+            $array = $stmt->fetchAll();
+            $users = json_decode(json_encode($array), true);
 
             foreach ($users as $user) {
-                if ($user[1] == $email) {
+                if ($user['email'] == $email) {
                     $errors['email'] = "This email is exist ! <br />";
                     break;
                 }
@@ -42,8 +45,9 @@ if (isset($_POST['register'])) {
         $email = $_POST['email'];
         $name = $_POST['user_name'];
         $password = password_hash($_POST['password'], PASSWORD_BCRYPT);
-        $users = "INSERT INTO users(`email`, `password`, `name`) VALUES ( '$email','$password', '$name')";
-        $result = mysqli_query($connect, $users);
+        $users = "INSERT INTO users(email, password, name) VALUES ( '$email','$password', '$name')";
+        $stmt = $pdo->prepare($users);
+        $stmt->execute();
 
         header('Location: login.php');
     }

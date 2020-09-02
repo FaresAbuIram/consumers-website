@@ -17,17 +17,19 @@ if (isset($_POST['submit'])) {
         $errors['password'] = 'A password is required ! <br />';
     }
     if (!array_filter($errors)) {
-        $users = 'SELECT * FROM users';
-        $result = mysqli_query($connect, $users);
-        $user = mysqli_fetch_all($result);
+        $allUser = 'SELECT * FROM users';
+        $stmt = $pdo->prepare($allUser);
+        $stmt->execute();
+        $array = $stmt->fetchAll();
+        $users = json_decode(json_encode($array), true);
         $correct = false;
         $corr_user = '';
         $user_id = '';
-        foreach ($user as $user1) {
-            if ($user1[1] == $_POST['email']) {
+        foreach ($users as $user) {
+            if ($user['email'] == $_POST['email']) {
                 $correct = true;
-                $user_id = $user1[0];
-                $corr_user = $user1[2];
+                $user_id = $user['_id'];
+                $corr_user = $user['password'];
                 break;
             }
         }

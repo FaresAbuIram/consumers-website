@@ -23,16 +23,18 @@ if (isset($_POST['submit'])) {
     $paid = $_POST['paid'];
 
     $price_name = $_POST['name'];
-    $con1 = "INSERT INTO goods(`user_id`, `consumer_id`, `name`, `price`, `if_paid`) VALUES ('$user_id','$cons_id','$name', '$price','$paid')";
-    $result1 = mysqli_query($connect, $con1);
-   
+    $con1 = "INSERT INTO goods(user_id, consumer_id, name, price, if_paid) VALUES ('$user_id','$cons_id','$name', '$price','$paid')";
+    $stmt = $pdo->prepare($con1);
+    $stmt->execute();
+
     header("Location: sales.php?id=$cons_id");
 }
 if (isset($_POST['remove'])) {
     $cons_id = $_POST['id'];
     $commodity_id = $_POST['Commodity_id'];
     $con2 = "DELETE FROM goods WHERE _id = $commodity_id";
-    $result2 = mysqli_query($connect, $con2);
+    $stmt = $pdo->prepare($con2);
+    $stmt->execute();
 
     header("Location: sales.php?id=$cons_id");
 }
@@ -45,7 +47,8 @@ if (isset($_POST['update'])) {
 
     $con4 = "UPDATE goods SET name = '$update_name', price = $price, if_paid = $paid WHERE _id = $Commodity_id";
 
-    $result4 = mysqli_query($connect, $con4);
+    $stmt = $pdo->prepare($con4);
+    $stmt->execute();
 
     header("Location: sales.php?id=$cons_id");
 }
@@ -56,30 +59,34 @@ $con_id = '';
 if (isset($_GET)) {
     $con_id = $_GET['id'];
     $con = 'SELECT * FROM consumers';
-    $result = mysqli_query($connect, $con);
-    $consumers = mysqli_fetch_all($result);
+    $stmt = $pdo->prepare($con);
+    $stmt->execute();
+    $array = $stmt->fetchAll();
+    $consumers = json_decode(json_encode($array), true);
     foreach ($consumers as $consumer) {
-        if ($consumer[0] == $con_id) {
-            $consumer_name = $consumer[2];
+        if ($consumer['_id'] == $con_id) {
+            $consumer_name = $consumer['consumer_name'];
             break;
         }
     }
 
     $con = 'SELECT * FROM goods ORDER BY name';
-    $result = mysqli_query($connect, $con);
-    $sales = mysqli_fetch_all($result);
+    $stmt = $pdo->prepare($con);
+    $stmt->execute();
+    $array = $stmt->fetchAll();
+    $sales = json_decode(json_encode($array), true);
 
     $arr = array('_id' => '', 'name' => '', 'price' => '', 'date' => '', 'paid' => '');
     $total = 0;
     foreach ($sales as $sale) {
-        if ($sale[1] == $_SESSION['user_id'] && $sale[2] == $con_id) {
-            $arr['name'] = $sale[3];
-            $arr['_id'] = $sale[0];
-            $arr['price'] = $sale[4];
-            $arr['date'] = $sale[6];
-            if ($sale[5] == 0) {
+        if ($sale['user_id'] == $_SESSION['user_id'] && $sale['consumer_id'] == $con_id) {
+            $arr['name'] = $sale['name'];
+            $arr['_id'] = $sale['_id'];
+            $arr['price'] = $sale['price'];
+            $arr['date'] = $sale['date'];
+            if ($sale['if_paid'] == 0) {
                 $arr['paid'] = 'Not Paid';
-                $total += $sale[4];
+                $total += $sale['price'];
             } else {
                 $arr['paid'] = 'Paid';
             }

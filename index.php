@@ -20,20 +20,21 @@ $user_id = $_SESSION['user_id'];
 
 if (isset($_POST['submit'])) {
     $consumer_name = $_POST['name'];
-    $con1 = "INSERT INTO consumers(`user_id`, `consumer_name`) VALUES ('$user_id','$consumer_name')";
-    $result1 = mysqli_query($connect, $con1);
+    $con1 = "INSERT INTO consumers(user_id, consumer_name) VALUES ('$user_id','$consumer_name')";
+    $stmt = $pdo->prepare($con1);
+    $stmt->execute();
     echo "<script> window.onload = function() {
         showMessage('The new consumer is added');
     }; </script>";
-    
-    
 }
 if (isset($_POST['remove'])) {
     $consumer_id = $_POST['consumer_id'];
     $con2 = "DELETE FROM consumers WHERE _id = $consumer_id";
-    $result2 = mysqli_query($connect, $con2);
+    $stmt = $pdo->prepare($con2);
+    $stmt->execute();
     $con3 = "DELETE FROM goods WHERE user_id= $user_id AND consumer_id =$consumer_id";
-    $result3 = mysqli_query($connect, $con3);
+    $stmt = $pdo->prepare($con3);
+    $stmt->execute();
     echo "<script> window.onload = function() {
         showMessage('The consumer is removed');
     }; </script>";
@@ -42,31 +43,36 @@ if (isset($_POST['update'])) {
     $update_name = $_POST['update_name'];
     $consumer_id = $_POST['consumer_id'];
     $con4 = "UPDATE consumers SET consumer_name = '$update_name' WHERE _id = $consumer_id AND user_id= $user_id";
-    $result4 = mysqli_query($connect, $con4);
+    $stmt = $pdo->prepare($con4);
+    $stmt->execute();
     echo "<script> window.onload = function() {
         showMessage('The consumer name is updated');
     }; </script>";
 }
 
-$con = 'SELECT * FROM consumers ORDER BY consumer_name';
-$result = mysqli_query($connect, $con);
-$consumers = mysqli_fetch_all($result);
+$con = "SELECT * FROM consumers ORDER BY consumer_name ";
+$stmt = $pdo->prepare($con);
+$stmt->execute();
+$array = $stmt->fetchAll();
+$consumers = json_decode(json_encode($array), true);
 $user_consumers = [];
 $arr = array('_id' => '', 'name' => '', 'total' => '');
 
 
 foreach ($consumers as $consumer) {
 
-    if ($consumer[1] == $_SESSION['user_id']) {
+    if ($consumer['user_id'] == $_SESSION['user_id']) {
         $sum = 0;
-        $arr['name'] = $consumer[2];
-        $arr['_id'] = $consumer[0];
+        $arr['name'] = $consumer['consumer_name'];
+        $arr['_id'] = $consumer['_id'];
         $sal = 'SELECT * FROM goods ';
-        $result = mysqli_query($connect, $sal);
-        $sales = mysqli_fetch_all($result);
+        $stmt = $pdo->prepare($sal);
+        $stmt->execute();
+        $array = $stmt->fetchAll();
+        $sales = json_decode(json_encode($array), true);
         foreach ($sales as $sale) {
-            if ($sale[1] == $_SESSION['user_id'] && $sale[2] == $consumer[0] && $sale[5] == 0) {
-                $sum += $sale[4];
+            if ($sale['user_id'] == $_SESSION['user_id'] && $sale['consumer_id'] == $consumer['_id'] && $sale['if_paid'] == 0) {
+                $sum += $sale['price'];
             }
         }
         $arr['total'] = $sum;
@@ -92,7 +98,7 @@ foreach ($consumers as $consumer) {
     <link href="assets/css/global.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
-    
+
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>

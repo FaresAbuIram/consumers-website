@@ -21,22 +21,26 @@ $allSale = [];
 
 
 $con = 'SELECT * FROM goods ORDER BY name';
-$result = mysqli_query($connect, $con);
-$sales = mysqli_fetch_all($result);
-$total='';
+$stmt = $pdo->prepare($con);
+$stmt->execute();
+$array = $stmt->fetchAll();
+$sales = json_decode(json_encode($array), true);
+$total = '';
 $arr = array('name' => '', 'price' => '', 'date' => '', 'paid' => '');
 $total = 0;
 foreach ($sales as $sale) {
-    $arr['name'] = $sale[3];
-    $arr['price'] = $sale[4];
-    $arr['date'] = $sale[6];
-    if ($sale[5] == 0) {
-        $arr['paid'] = 'Not Paid';
-        $total += $sale[4];
-    } else {
-        $arr['paid'] = 'Paid';
+    if ($sale['user_id'] == $user_id) {
+        $arr['name'] = $sale['name'];
+        $arr['price'] = $sale['price'];
+        $arr['date'] = $sale['date'];
+        if ($sale['if_paid'] == 0) {
+            $arr['paid'] = 'Not Paid';
+            $total += $sale['price'];
+        } else {
+            $arr['paid'] = 'Paid';
+        }
+        array_push($allSale, $arr);
     }
-    array_push($allSale, $arr);
 }
 
 
@@ -53,7 +57,7 @@ foreach ($sales as $sale) {
     <link rel="apple-touch-icon" sizes="76x76" href="../assets/img/apple-icon.png">
     <link rel="icon" type="image/png" href="../assets/img/favicon.ico">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-    <title>My website</title>
+    <title>All Sales</title>
     <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport' />
     <!--     Fonts and icons     -->
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700,200" rel="stylesheet" />
