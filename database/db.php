@@ -1,9 +1,5 @@
 <?php
-$connect = mysqli_connect('localhost', 'faris', '0123456', 'sales');
 
-if (!$connect) {
-    echo "Connection error : " . mysqli_connect_error();
-}
 $host = "ec2-3-81-240-17.compute-1.amazonaws.com";
 $user = "rujyezqmvonpxe";
 $password = "693904463cbd8597e8b5666ecdf0e796446dcdc82f6d5e0d640b710f9e7f3f1a";
