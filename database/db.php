@@ -1,10 +1,10 @@
 <?php
 
-$host = "ec2-3-81-240-17.compute-1.amazonaws.com";
+$host = "";
 $user = "rujyezqmvonpxe";
-$password = "693904463cbd8597e8b5666ecdf0e796446dcdc82f6d5e0d640b710f9e7f3f1a";
+$password = "";
 $dbname = "d7kmh81qpvgf01";
-$port = "5432";
+$port = "";
 
 
 try {
