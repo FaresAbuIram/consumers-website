@@ -27,7 +27,7 @@
 - Convenient style.
 
 ## Built with 
- ِ- PHP: Language used   
+- PHP: Language used   
 - PostgreSql :Data Base
  
 ## Versioning
